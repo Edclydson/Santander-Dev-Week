@@ -16,7 +16,7 @@ public class WebConfig {
                 registry.addMapping("/**")
                 .allowedMethods("GET","POST","PUT","DELETE")
                 .allowedHeaders("*")
-                .allowedOrigins("http://localhost:4200");
+                .allowedOrigins("https://app-bankline-s4nt4nd3r.herokuapp.com/");
             }
 
         };
