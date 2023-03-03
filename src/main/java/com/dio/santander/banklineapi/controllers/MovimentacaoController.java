@@ -4,12 +4,12 @@ import java.util.List;
 
 import com.dio.santander.banklineapi.dto.NovaMovimentacao;
 import com.dio.santander.banklineapi.model.Movimentacao;
-import com.dio.santander.banklineapi.repository.MovimentacaoRepository;
-import com.dio.santander.banklineapi.services.NovaMovimentacaoService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.dio.santander.banklineapi.services.impl.movimentacao.ListaMovimentacaoImpl;
+import com.dio.santander.banklineapi.services.impl.movimentacao.ListaTodasMovimetacoesImpl;
+import com.dio.santander.banklineapi.services.impl.movimentacao.MovimentacaoImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,30 +20,34 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/movimentacoes")
-@Api(tags = {"Controlador das Movimentações"})
+@Tag(name = "Controlador das Movimentações")
 public class MovimentacaoController {
     
-    @Autowired
-    MovimentacaoRepository repository;
+    private final MovimentacaoImpl movimentacao;
+    private final ListaTodasMovimetacoesImpl listaTodasMovimetacoes;
+    private final ListaMovimentacaoImpl listaMovimentacao;
 
-    @Autowired
-    NovaMovimentacaoService service;
+    public MovimentacaoController(MovimentacaoImpl movimentacao, ListaTodasMovimetacoesImpl listaTodasMovimetacoes, ListaMovimentacaoImpl listaMovimentacao) {
+        this.movimentacao = movimentacao;
+        this.listaTodasMovimetacoes = listaTodasMovimetacoes;
+        this.listaMovimentacao = listaMovimentacao;
+    }
 
     @GetMapping
-    @ApiOperation(value = "Consulta todas as movimentações feitas")
+    @Operation(summary = "Consulta todas as movimentações feitas")
     public List<Movimentacao> findAll(){
-        return repository.findAll();
+        return listaTodasMovimetacoes.listaTodasMovimentacoes();
     }
 
     @PostMapping
-    @ApiOperation(value = "Realiza uma nova movimentação")
+    @Operation(summary = "Realiza uma nova movimentação")
     public void save(@RequestBody NovaMovimentacao novaMovimentacao){
-        service.save(novaMovimentacao);
+        movimentacao.createmovement(novaMovimentacao);
     }
 
     @GetMapping("/{idConta}")
-    @ApiOperation(value=" Consulta as movimentações de uma conta especifica")
-    public List<Movimentacao> findAll(@PathVariable("idConta") Integer idConta){
-        return repository.findByIdConta(idConta);
+    @Operation(summary = " Consulta as movimentações de uma conta especifica")
+    public List<Movimentacao> findById(@PathVariable("idConta") Integer idConta){
+        return listaMovimentacao.mostrarMovimentacao(idConta);
     }
 }
