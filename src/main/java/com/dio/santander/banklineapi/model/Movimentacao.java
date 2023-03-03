@@ -2,71 +2,54 @@ package com.dio.santander.banklineapi.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
+@Getter
 @Table(name="tab_movimentacao")
 public class Movimentacao {
 
+
+    public Movimentacao(LocalDateTime dataHora,
+                        String descricao,
+                        Double valor,
+                        MovimentacaoTipo tipo,
+                        Integer idConta) {
+        this.dataHora = dataHora;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.tipo = tipo;
+        this.idConta = idConta;
+    }
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Schema(description = "Numero de identificação da movimentação", name = "id",type = "Integer")
     private Integer id;
+    @Schema(description = "Data e hora que a movimentação foi feita", name = "dataHora", type = "LocalDateTime")
     private LocalDateTime dataHora;
+    @Schema(description = "Breve descrição sobre a movimentação", name = "descricao",type = "String")
     private String descricao;
+    @Schema(description = "Valor da movimentação", name = "valor",type = "Double")
     private Double valor;
 
     @Enumerated(EnumType.STRING)
+    @Schema(description = "Tipo da movimentação (RECEITA ou DESPESA)", name = "tipo",type = "MovimentacaoTipo")
     private MovimentacaoTipo tipo;
 
     @Column(name="id_conta")
+    @Schema(description = "Numero de identificação da conta que fez a movimentação", name = "idConta", type = "Integer")
     private Integer idConta;
-
-    public Integer getIdConta() {
-        return idConta;
-    }
-
-    public void setIdConta(Integer idConta) {
-        this.idConta = idConta;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public LocalDateTime getDataHora() {
-        return dataHora;
-    }
-    public void setDataHora(LocalDateTime dataHora) {
-        this.dataHora = dataHora;
-    }
-    public String getDescricao() {
-        return descricao;
-    }
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-    public Double getValor() {
-        return valor;
-    }
-    public void setValor(Double valor) {
-        this.valor = valor;
-    }
-    public MovimentacaoTipo getTipo() {
-        return tipo;
-    }
-    public void setTipo(MovimentacaoTipo tipo) {
-        this.tipo = tipo;
-    }
-    
-    
 
 }

@@ -1,12 +1,13 @@
 package com.dio.santander.banklineapi.model;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tab_correntista")
@@ -14,14 +15,19 @@ public class Correntista {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@Schema(description = "Id do correntista",name = "id",type = "Integer")
     private Integer id;
+    //@Schema(description = "Nome do correntista",name = "nome",type = "String")
     private String nome;
     
     @Column(length = 11)
+    //@Schema(description = "Numero do cpf do correntista", name = "cpf", type = "String")
     private String cpf;
     
     @Embedded
+    //@Schema(description = "Conta vinculada ao correntista", name = "conta", type = "Conta")
     private Conta conta;
+    
     
     public Conta getConta() {
         return conta;
