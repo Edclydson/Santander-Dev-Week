@@ -1,6 +1,7 @@
 package com.dio.santander.banklineapi.services.impl.movimentacao;
 
 import com.dio.santander.banklineapi.dto.NovaMovimentacao;
+import com.dio.santander.banklineapi.exceptions.InsuficientFundsException;
 import com.dio.santander.banklineapi.model.Movimentacao;
 import com.dio.santander.banklineapi.model.MovimentacaoTipo;
 import com.dio.santander.banklineapi.repository.MovimentacaoRepository;
@@ -23,18 +24,22 @@ public class MovimentacaoImpl implements IMovimentacao{
     }
 
     @Override
-    public void createmovement(NovaMovimentacao movimentacao){
-        if (movimentacao.getTipo() == MovimentacaoTipo.RECEITA){
-            receita.receita(movimentacao);
-        } else {
-            despesa.despesa(movimentacao);
-        }
-        movimentacaoRepository.save(new Movimentacao(
+    public Movimentacao createmovement(NovaMovimentacao movimentacao) {
+        return movimentacaoRepository.save(new Movimentacao(
                 LocalDateTime.now(),
                 movimentacao.getDescricao(),
                 movimentacao.getValor(),
                 movimentacao.getTipo(),
                 movimentacao.getIdConta()
         ));
+    }
+
+    @Override
+    public void newMovement(NovaMovimentacao movimentacao) throws InsuficientFundsException {
+        if (movimentacao.getTipo() == MovimentacaoTipo.RECEITA){
+            receita.receita(movimentacao);
+        } else {
+            despesa.despesa(movimentacao);
+        }
     }
 }
